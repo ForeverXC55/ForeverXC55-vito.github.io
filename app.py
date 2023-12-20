@@ -2,16 +2,13 @@ import jieba
 import numpy as np
 import pandas as pd
 import altair as alt
-from flask import Flask, render_template, request
+from flask import Flask
 import requests
 from bs4 import BeautifulSoup
 from collections import Counter
 import re
-
 from matplotlib import pyplot as plt
-from nltk import PorterStemmer
-from nltk.corpus import stopwords
-from pyecharts.charts import Bar, Pie, Line, WordCloud
+from pyecharts.charts import WordCloud
 from pyecharts import options as opts
 import streamlit as st
 from streamlit_echarts import st_pyecharts
@@ -71,6 +68,8 @@ def main():
     st.title("网页词条数爬取")
 
     url = st.text_input("Enter a URL:")
+    # 在侧边栏生成下拉框，用于选择图表类型
+    result_type = st.sidebar.selectbox("请选择图表类型：", ["柱状图", "饼图", "折线图", "词云图", "回归图", "直方图", "成对关系图", "数据表格"])
     if st.button("提交") or url:
         try:
             word_count = get_word_counts(url)
@@ -82,7 +81,7 @@ def main():
             df = df.nlargest(15, 'count')
 
             # 选择要显示的结果
-            result_type = st.selectbox("选择显示类型", ["柱状图", "饼图", "折线图", "词云图", "回归图", "直方图", "成对关系图", "数据表格"])  # 添加瀑布图选项
+            # result_type = st.selectbox("选择显示类型", ["柱状图", "饼图", "折线图", "词云图", "回归图", "直方图", "成对关系图", "数据表格"])  # 添加瀑布图选项
 
             if result_type == "柱状图":
                 st.subheader("柱状图")
